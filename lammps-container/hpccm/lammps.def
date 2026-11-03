@@ -1,0 +1,13 @@
+BootStrap: docker
+From: ubuntu:24.04
+%post
+    . /.singularity.d/env/10-docker*.sh
+
+%post
+    cd /
+    apt-get update
+    DEBIAN_FRONTEND=noninteractive apt-get install -y lammps
+    rm -rf /var/lib/apt/lists/*
+
+
+
