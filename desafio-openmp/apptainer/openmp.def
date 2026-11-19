@@ -1,0 +1,20 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%post
+    apt-get update
+    apt-get install -y gcc make
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+    mkdir -p /opt/openmp
+
+%files
+    omp-letters.c /opt/openmp/omp-letters.c
+    Makefile /opt/openmp/Makefile
+
+%post
+    cd /opt/openmp
+    make omp-letters
+
+%runscript
+    exec /opt/openmp/omp-letters "$@"
