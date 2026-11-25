@@ -1,0 +1,22 @@
+Bootstrap: docker
+From: ubuntu:24.04
+
+%post
+    apt-get update
+    apt-get install -y gcc openmpi-bin libopenmpi-dev
+    apt-get clean
+    rm -rf /var/lib/apt/lists/*
+    mkdir -p /opt/mpi
+
+%files
+    mpi-letters-coletivas.c /opt/mpi/mpi-letters-coletivas.c
+
+%post
+    mpicc -Wall -Wextra -O2 /opt/mpi/mpi-letters-coletivas.c -o /opt/mpi/mpi-letters-coletivas
+
+%environment
+    export HWLOC_COMPONENTS=-gl
+    export OMPI_MCA_btl_vader_single_copy_mechanism=none
+
+%runscript
+    exec /opt/mpi/mpi-letters-coletivas "$@"
